@@ -27,7 +27,7 @@ module.exports = {
 
       //adding the role
       try{
-        user.roles.add(role, "You have been given the role " + role + " by " + interaction.user.tag);
+        user.roles.add(role, "You have been given the role " + role.name + " by " + interaction.user.tag);
         interaction.reply({content:"Role " + role.name + " added to " + user.user.username + ".", ephemeral:true});
       } catch(error){
         interaction.reply({content:"Error while adding the role, try again.", ephemeral:true});
