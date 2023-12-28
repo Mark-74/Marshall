@@ -23,16 +23,20 @@ module.exports = {
       guild = interaction.guild;
       const reason = interaction.options.getString("reason") || "No reason provided";
 
-      //getting user and role
+      //getting user and member
       user = interaction.options.getUser('user');
-      console.log(user);
+      member = guild.members.cache.get(user.id);
 
-      //banning the user
-      try{
-        await interaction.guild.members.ban(user, {reason})
-        interaction.reply("User " + user.tag + " has been Banned by Marshall by order of " + interaction.user.tag + ".\n Have an amazing day.");
-      } catch(error){
-        interaction.reply({content:"Error while banning the user, try again.", ephemeral:true});
-      }
+      //checking if the user is bannable
+      if(!member.permissions.has(PermissionFlagsBits.BanMembers)){
+        //banning the user
+        try{
+          await member.ban({reason: reason})
+          interaction.reply("User " + user.username + " has been Banned by Marshall by order of " + interaction.user.username + ".\nHave an amazing day.");
+        } catch(error){
+          interaction.reply({content:"Error while banning the user, try again.", ephemeral:true});
+        }
+      } else {interaction.reply("Cannot ban a staff member.");}
+      
     },
   };
