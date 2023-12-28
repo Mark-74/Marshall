@@ -19,16 +19,16 @@ module.exports = {
   
     async execute(interaction) {
       
-        guild = interaction.client.guilds.cache.get(interaction.guildId);
+        guild = interaction.guild;
 
         //getting user and role
-        user = guild.members.cache.get(interaction.options.getUser('user').id);
+        member = guild.members.cache.get(interaction.options.getUser('user').id);
         role = interaction.options.getRole('role');
 
         //removing the role
         try{
-            user.roles.remove(role, "The role " + role.name + " was removed from you by " + interaction.user.tag);
-            interaction.reply({content:"Role " + role.name + " removed from " + user.user.username + ".", ephemeral:true});
+            member.roles.remove(role, "The role " + role.name + " was removed from you by " + interaction.user.tag);
+            interaction.reply({content:"Role " + role.name + " removed from " + member.user.username + ".", ephemeral:true});
         } catch(error){
             interaction.reply({content:"Error while removing the role, are you sure the user has the role " + role.name + "?", ephemeral:true}); //useless, if the user hasn't got that role, this gets removed from him anyway
         }

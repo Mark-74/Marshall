@@ -19,16 +19,16 @@ module.exports = {
   
     async execute(interaction) {
 
-      guild = interaction.client.guilds.cache.get(interaction.guildId);
+      guild = interaction.guild;
 
       //getting user and role
-      user = guild.members.cache.get(interaction.options.getUser('user').id);
+      member = guild.members.cache.get(interaction.options.getUser('user').id);
       role = interaction.options.getRole('role');
 
       //adding the role
       try{
-        user.roles.add(role, "You have been given the role " + role.name + " by " + interaction.user.tag);
-        interaction.reply({content:"Role " + role.name + " added to " + user.user.username + ".", ephemeral:true});
+        member.roles.add(role, "You have been given the role " + role.name + " by " + interaction.user.tag);
+        interaction.reply({content:"Role " + role.name + " added to " + member.user.username + ".", ephemeral:true});
       } catch(error){
         interaction.reply({content:"Error while adding the role, try again.", ephemeral:true});
       }
