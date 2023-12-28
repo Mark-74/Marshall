@@ -26,11 +26,16 @@ module.exports = {
       role = interaction.options.getRole('role');
 
       //adding the role
-      try{
-        member.roles.add(role, "You have been given the role " + role.name + " by " + interaction.user.tag);
-        interaction.reply({content:"Role " + role.name + " added to " + member.user.username + ".", ephemeral:true});
-      } catch(error){
-        interaction.reply({content:"Error while adding the role, try again.", ephemeral:true});
-      }
+      if(interaction.member.roles.highest.position > role.position){
+        if(interaction.member.roles.highest.position > member.roles.highest.position){
+          try{
+            member.roles.add(role, "You have been given the role " + role.name + " by " + interaction.user.tag);
+            interaction.reply({content:"Role " + role.name + " added to " + member.user.username + ".", ephemeral:true});
+          } catch(error){
+            interaction.reply({content:"Error while adding the role, try again.", ephemeral:true});
+          }
+        } else interaction.reply({content:"Cannot add a role to someone who has more privileges than you.", ephemeral:true});
+      } else interaction.reply({content:"Cannot add a role which guarantees more privileges than you have.", ephemeral:true});
+      
     },
   };
