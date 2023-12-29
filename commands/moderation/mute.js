@@ -1,84 +1,81 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
-    data: new SlashCommandBuilder()
-      .setName('mute')
-      .setDescription('mutess a User')
+  data: new SlashCommandBuilder()
+    .setName('mute')
+    .setDescription('mutes a User')
 
-      .addUserOption(option => 
-        option
-            .setName('user')
-            .setDescription('Who is being muted')
-            .setRequired(true))
+    .addUserOption(option =>
+      option
+        .setName('user')
+        .setDescription('Who is being muted')
+        .setRequired(true))
 
-      .addNumberOption(option =>
-        option
+    .addNumberOption(option =>
+      option
         .setName('duration')
         .setDescription('How much time the user must be muted')
         .setMinValue(1)
-        .setMaxValue(9999)
+        .setMaxValue(672)
         .setRequired(true))
 
-      .addStringOption(option => 
-        option
+    .addStringOption(option =>
+      option
         .setName('unit')
         .setDescription('to understand the number you just inserted in the duration form')
         .setRequired(true)
         .addChoices(
-            {name:"seconds", value: "seconds"},
-            {name:"minutes", value:"minutes"},
-            {name:"hours", value:"minutes"}
+          { name: "seconds", value: "seconds" },
+          { name: "minutes", value: "minutes" },
+          { name: "hours", value: "hours" }
         ))
 
-       .setDefaultMemberPermissions(PermissionFlagsBits.MuteMembers) //you can only use this command if you have the mute members permission
-       .setDMPermission(false),
-  
-    async execute(interaction) {
+    .setDefaultMemberPermissions(PermissionFlagsBits.MuteMembers) //you can only use this command if you have the mute members permission
+    .setDMPermission(false),
 
-      guild = interaction.guild;
+  async execute(interaction) {
 
-      //getting member, duration and unit
-      member = guild.members.cache.get(interaction.options.getUser('user').id);
-      duration = interaction.options.getNumber("duration");
-      unit = interaction.options.getString("unit");
-      
-      //finding mutedRole
-      const mutedRole = interaction.guild.roles.cache.find(
-        (role) => role.name === 'Muted');
+    guild = interaction.guild;
 
-      if(mutedRole){
-        if(interaction.member.roles.highest.position > member.roles.highest.position){
-          try{
-            //adding muted Role
-            member.roles.add(mutedRole, "You have been given the role " + mutedRole.name + " by " + interaction.user.tag);
+    //getting member, duration and unit
+    member = await guild.members.fetch(interaction.options.getUser('user').id);
+    duration = interaction.options.getNumber("duration");
+    unit = interaction.options.getString("unit");
 
-            interaction.reply(interaction.user.tag + " has muted " + member.user.tag + " for " + duration + " " + unit);
+    //finding mutedRole
+    const mutedRole = interaction.guild.roles.cache.find(
+      (role) => role.name === 'Muted');
 
-            //converting to milliseconds
-            switch (unit){
-              case "seconds":
-                duration *= 1;
-                break;
-              case "minutes":
-                duration *= 60;
-                break;
-              case "hours":
-                duration *= 3600;
-                break;
-            }
-            duration *= 1000;
+    if (mutedRole) {
+      if (interaction.member.roles.highest.position > member.roles.highest.position) {
+        try {
+          //adding muted Role
+          member.roles.add(mutedRole, "You have been given the role " + mutedRole.name + " by " + interaction.user.tag);
 
-            setTimeout(() => {
-              member.roles.remove(mutedRole); // remove the role
-            }, duration);
+          interaction.reply(interaction.user.tag + " has muted " + member.user.tag + " for " + duration + " " + unit);
 
-          } catch(error){
-            interaction.reply({content:"Error while muting the user, try again.", ephemeral:true});
+          //converting to milliseconds
+          switch (unit) {
+            case "seconds":
+              duration *= 1;
+              break;
+            case "minutes":
+              duration *= 60;
+              break;
+            case "hours":
+              duration *= 3600;
+              break;
           }
-        } else interaction.reply({content:"Cannot mute someone who has more privileges than you.", ephemeral:true});
-      } else interaction.reply("Cannot find Muted role in the server, try creating a role Muted, configure its permissions and then try launching this command again.")
+          duration *= 1000;
 
-        
-      
-    },
-  };
+          setTimeout(() => {
+            member.roles.remove(mutedRole); // remove the role
+          }, duration);
+
+        } catch (error) {
+          interaction.reply({ content: "Error while muting the user, try again.", ephemeral: true });
+        }
+      } else interaction.reply({ content: "Cannot mute someone who has more privileges than you.", ephemeral: true });
+    } else interaction.reply("Cannot find Muted role in the server, try creating a role Muted, configure its permissions and then try launching this command again.")
+  },
+};

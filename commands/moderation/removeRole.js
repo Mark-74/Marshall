@@ -22,7 +22,7 @@ module.exports = {
         guild = interaction.guild;
 
         //getting user and role
-        member = guild.members.cache.get(interaction.options.getUser('user').id);
+        member = await guild.members.fetch(interaction.options.getUser('user').id);
         role = interaction.options.getRole('role');
 
         //checking if the user has an high-enough position to remove a role
