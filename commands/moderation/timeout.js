@@ -2,7 +2,7 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('time_out')
+        .setName('timeout')
         .setDescription('time_outs a User')
 
         .addUserOption(option =>
