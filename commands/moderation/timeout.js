@@ -33,7 +33,7 @@ module.exports = {
         .addStringOption(option =>
             option            
                 .setName('reason')
-                .setDescription('wgy are you timing out this user')
+                .setDescription('why are you timing out this user')
                 .setRequired(false))
 
         .setDefaultMemberPermissions(PermissionFlagsBits.MuteMembers) //you can only use this command if you have the mute members permission
@@ -50,6 +50,8 @@ module.exports = {
 
         if (interaction.member.roles.highest.position > member.roles.highest.position) {
             try {
+
+                interaction.reply(interaction.user.tag + " has timed out " + member.user.tag + " for " + duration + " " + unit);
                 
                 //converting to milliseconds
                 switch (unit) {
@@ -66,11 +68,9 @@ module.exports = {
                 duration *= 1000;
 
                 //getting reason
-                reason = interaction.options.getString('reason');
-                if(reason === null) reason = "No reason given."
+                reason = interaction.options.getString('reason') || "No reason given";
 
                 member.timeout(duration, reason)
-                interaction.reply(interaction.user.tag + " has timed out " + member.user.tag + " for " + duration + " " + unit);
 
             } catch (error) {
                 interaction.reply({ content: "Error while muting the user, try again.", ephemeral: true });
