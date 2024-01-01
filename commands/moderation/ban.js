@@ -25,7 +25,7 @@ module.exports = {
 
       //getting user and member
       user = interaction.options.getUser('user');
-      member = guild.members.cache.get(user.id);
+      member = await guild.members.fetch(user.id);
 
       //checking if the user is bannable
       if(!member.permissions.has(PermissionFlagsBits.BanMembers)){
