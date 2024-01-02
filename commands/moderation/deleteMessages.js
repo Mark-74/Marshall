@@ -29,7 +29,7 @@ module.exports = {
         //banning the user
         try{
           await interaction.channel.bulkDelete(userMessages);
-          interaction.reply('All of ' + member + ' messages have been deleted.');
+          interaction.reply('All of ' + member.user.tag + ' messages have been deleted.');
         } catch(error){
           interaction.reply({content:"Error while deleting the messages of the user, try again.", ephemeral:true});
         }
