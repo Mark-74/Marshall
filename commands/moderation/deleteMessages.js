@@ -21,7 +21,7 @@ module.exports = {
       user = interaction.options.getUser('user');
       member = await guild.members.fetch(interaction.options.getUser('user').id);
 
-      messages = await interaction.channel.messages.fetch({limit:2}); //temporary
+      messages = await interaction.channel.messages.fetch();
       userMessages = await messages.filter((m) => m.author.id === member.id);
 
       //checking if the user is bannable
