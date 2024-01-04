@@ -1,4 +1,5 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, AttachmentBuilder } = require('discord.js');
+const { createCanvas, Image } = require('canvas');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -29,6 +30,15 @@ module.exports = {
       if(interaction.member.roles.highest.position > role.position){
         if(interaction.member.roles.highest.position > member.roles.highest.position){
           try{
+            const canvas = createCanvas(500, 200); //a pfp is 128 * 128
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = 'rgb(137,0,174)';
+            ctx.rect(0,0, canvas.width, canvas.height);
+
+            //TODO: create a canvas with the pfp of the user, its name and the name of the role which has been given to him
+            const image = new Image();
+            //image.src = 
             member.roles.add(role, "You have been given the role " + role.name + " by " + interaction.user.tag);
             interaction.reply({content:"Role " + role.name + " added to " + member.user.username + ".", ephemeral:true});
           } catch(error){
