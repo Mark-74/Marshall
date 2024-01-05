@@ -49,32 +49,35 @@ module.exports = {
         unit = interaction.options.getString("unit");
 
         if (interaction.member.roles.highest.position > member.roles.highest.position) {
-            try {
+            if(!member.permissions.has(PermissionFlagsBits.MuteMembers)){
+                try {
 
-                interaction.reply(interaction.user.tag + " has timed out " + member.user.tag + " for " + duration + " " + unit);
-                
-                //converting to milliseconds
-                switch (unit) {
-                    case "seconds":
-                        duration *= 1;
-                        break;
-                    case "minutes":
-                        duration *= 60;
-                        break;
-                    case "hours":
-                        duration *= 3600;
-                        break;
+                    interaction.reply(interaction.user.tag + " has timed out " + member.user.tag + " for " + duration + " " + unit);
+                    
+                    //converting to milliseconds
+                    switch (unit) {
+                        case "seconds":
+                            duration *= 1;
+                            break;
+                        case "minutes":
+                            duration *= 60;
+                            break;
+                        case "hours":
+                            duration *= 3600;
+                            break;
+                    }
+                    duration *= 1000;
+    
+                    //getting reason
+                    reason = interaction.options.getString('reason') || "No reason given";
+    
+                    member.timeout(duration, reason)
+    
+                } catch (error) {
+                    interaction.reply({ content: "Error while muting the user, try again.", ephemeral: true });
                 }
-                duration *= 1000;
-
-                //getting reason
-                reason = interaction.options.getString('reason') || "No reason given";
-
-                member.timeout(duration, reason)
-
-            } catch (error) {
-                interaction.reply({ content: "Error while muting the user, try again.", ephemeral: true });
-            }
+            } else interaction.reply({ content: "Cannot mute someone who has more Mute Members permission.", ephemeral: true });
+            
         } else interaction.reply({ content: "Cannot mute someone who has more privileges than you.", ephemeral: true });
     },
 };
