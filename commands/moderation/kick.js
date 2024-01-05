@@ -15,7 +15,7 @@ module.exports = {
             .setDescription('Why are you kicking this user')
             .setRequired(false)
             .setMaxLength(512))
-       .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers) //you can only use this command if you have the ban members permission
+       .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers) //you can only use this command if you have the kick members permission
        .setDMPermission(false),
   
     async execute(interaction) {
