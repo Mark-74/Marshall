@@ -1,5 +1,5 @@
 {
-  "name": "Discord Bot",
+  "name": "Marshall",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@napi-rs/canvas": "^0.1.44",
     "canvas": "^2.11.2",
     "discord.js": "^14.13.0"
   }
