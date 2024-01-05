@@ -29,15 +29,15 @@ module.exports = {
     //getting user and role
     member = await guild.members.fetch(interaction.options.getUser('user').id);
     role = interaction.options.getRole('role');
-    roleColor = role.hexColor; //color in hex
 
+    roleName = role.name;
     memberName = member.displayName;
-    if (memberName.length > 19) memberName = memberName.slice(0, 15) + "...";
 
-    //creating message to send on the canvas
-    message = memberName + ' received ' + role.name;
-    if (message.length > 40) message = message.slice(0, 37) + '...';
-    message += '\nby ' + interaction.member.displayName;
+    if (memberName.length > 15) memberName = memberName.slice(0, 12) + "...";
+    message = memberName + ' received ';
+
+    if(message.length + roleName.length > 35 ) roleName = roleName.slice(0, roleName.length - (message.length + roleName.length - 35) - 3) + "...";
+    message += '\nby ' + interaction.member.displayName; //the role name will be added later
 
     //adding the role
     if (interaction.member.roles.highest.position > role.position) {
@@ -66,9 +66,18 @@ module.exports = {
           image.onload = async function () {
 
             //adding the message to the canvas
+            //first part of the message
             ctx.fillStyle = 'white';
             ctx.font = '35px Montserrat Black';
             ctx.fillText(message, 280, 114, 710);
+
+            //box under role name
+            ctx.fillStyle = role.hexColor;
+            ctx.fillRect(280 + parseInt(ctx.measureText(message).width - 2.5), 82, parseInt(ctx.measureText(roleName).width + 6.5), 40);
+
+            //role name
+            ctx.fillStyle = 'white';
+            ctx.fillText(roleName, 280 + parseInt(ctx.measureText(message).width + 0.5), 114, 710);
 
             //circle pfp
             ctx.beginPath();
