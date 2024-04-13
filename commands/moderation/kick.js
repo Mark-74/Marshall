@@ -2,8 +2,8 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-      .setName('ban')
-      .setDescription('bans a User')
+      .setName('kick')
+      .setDescription('kicks a User')
       .addUserOption(option => 
         option
             .setName('user')
@@ -28,7 +28,7 @@ module.exports = {
       member = await guild.members.fetch(user.id);
 
       //checking if the user is bannable
-      if(!meber.roles.highest.position > interaction.member.roles.highest.position){
+      if(!member.roles.highest.position > interaction.member.roles.highest.position){
         if(!member.permissions.has(PermissionFlagsBits.KickMembers)){
             //banning the user
             try{
